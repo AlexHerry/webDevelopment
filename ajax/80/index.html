@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hero - Admin</title>
+    <link rel="stylesheet" href="/bootstrap.css">
+    <style>
+        .hero-list img {
+            width: 50px;
+        }
+    </style>
+    <script src="./jquery-3.4.1.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="page-header container">
+            <h1>海贼王 <small>角色管理器</small></h1>
+        </div>
+    </header>
+    <div class="container hero-list">
+        <a class="btn btn-success pull-right" href="/add">添加英雄</a>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>名称</th>
+                    <th>能力</th>
+                    <th>团体</th>
+                    <th>图片</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    function get_data() {
+
+        $.ajax({
+            url: 'http://127.0.0.1:90/all',
+            async: true,
+            success(back) {
+                var arr = JSON.parse(back);
+                var s = '';
+                for (let i = 0; i < arr.length; i++) {
+                    s += `<tr>
+                <td>${arr[i].id}</td>
+                <td>${arr[i].name}</td>
+                <td>${arr[i].nengli}</td>
+                <td>${arr[i].jituan}</td>
+                <td>${arr[i].img? `<img src="http://127.0.0.1:90/img/${arr[i].img}"/>` : ``}</td>
+                <td>
+                    <a href="show?id=${arr[i].id}">查看</a>
+                    <a href="replace?id=${arr[i].id}">修改</a>
+                    <a href="" class="del" x=${arr[i].id}>删除</a>
+                </td>
+                </tr>`
+                }
+                $('#tbody').html(s);
+            }
+        })
+    }
+
+    document.getElementById('tbody').onclick = function (ev) {
+        if (ev.target.className == 'del') {
+            ev.preventDefault();
+            if (!confirm("确认删除？")) {
+                return 0;
+            };
+            var id = ev.target.getAttribute('x');
+            var ajax = new XMLHttpRequest();
+            ajax.open('get', 'http://127.0.0.1:90/del?id=' + id);
+            ajax.send();
+            ajax.onreadystatechange = function () {
+                if (ajax.readyState == 4) {
+                    // alert(ajax.responseText);
+                    get_data();
+                }
+            }
+        }
+    }
+
+    // var del_lis = document.getElementsByClassName("del");
+    // console.log(del_lis.length);
+    // var trs = document.getElementsByTagName('tr');
+    // for (let i = 1; i < del_lis.length; i++) {
+    //     del_lis[i - 1].onclick = () => {
+    //         var id = trs[i].children[0].innerHTML;
+    //         console.log(id);
+    //     }
+    // }
+    window.onload = get_data;
+</script>
+
+</html>
