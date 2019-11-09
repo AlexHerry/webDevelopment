@@ -1,7 +1,7 @@
 # jQuery
 
-My First jQuery&amp;node_js project
-This library will not be updated for the time being, but there will be more libraries on jQuery to increase the amount of code ----- Alex
+My First jQuery & node.js project.
 
-A simple http server for personal small management data,
-Novice computer, if the project is wrong, please ask for your attention
+A small, personal http server for managing data.
+
+I am a computer beginner. If there are any bugs or errors in the code, please initiate an issue.
