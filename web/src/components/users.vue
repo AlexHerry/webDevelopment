@@ -177,7 +177,7 @@ export default {
       });
     },
     searchKeyword() {
-      this.getData(`/users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${this.pagesize}`, 'GET', '', (bak) => {
+      this.getData(`/users?query=${this.query}&pagenum=1&pagesize=10`, 'GET', '', (bak) => {
         this.userData = bak.data.users;
       });
     },

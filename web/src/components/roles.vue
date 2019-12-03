@@ -29,7 +29,7 @@
                       <i class="el-icon-arrow-right"></i>
                     </el-col>
                     <el-col :span="18">
-                      <el-tag closable type="warning" v-for="three in two.children" :key="three.id" @close="delAuth(scope.row.id, three.id)">{{ three.authName }}</el-tag>
+                      <el-tag closable type="warning" v-for="three in two.children" :key="three.id" @close="delAuth(scope.row, three.id)">{{ three.authName }}</el-tag>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -226,14 +226,12 @@ export default {
         }
       });
     },
-    delAuth(roleid, rightid) {
-      this.getData(`/roles/${roleid}/rights/${rightid}`, 'DELETE', '', (bak) => {
+    delAuth(role, rightid) {
+      this.getData(`/roles/${role.id}/rights/${rightid}`, 'DELETE', '', (bak) => {
         console.log(bak);
         if (bak.meta.status == 200) {
           this.$message({message: '删除成功', type: 'success'});
-          this.getData('/roles', 'GET', '', (bak) => {
-            this.roleList = bak.data;
-          });
+          role.children = bak.data;
         } else {
           this.$message({message: '删除失败', type: 'error'});
         }
