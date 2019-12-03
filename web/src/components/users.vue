@@ -105,7 +105,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="alterUserDialog = false">取 消</el-button>
-        <el-button type="primary" @click="editUserData">确 定</el-button>
+        <el-button type="primary" @click="alterUserData">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -142,6 +142,7 @@ export default {
       },
       alterUserDialog: false,
       authList: [],
+      authIdList: {},
     };
   },
   methods: {
@@ -242,7 +243,6 @@ export default {
       });
     },
     alterUser(role) {
-      console.log(role);
       if (role.role_name == '超级管理员' && role.id == 500) {
         this.editUserForm.role_name = 0;
       } else if (role.role_name == '超级管理员') {
@@ -255,7 +255,23 @@ export default {
       this.editUserForm.id = role.id;
       this.getData(`/roles`, 'GET', '', (bak) => {
         this.authList = bak.data;
+        for (let i = 0; i < bak.data.length; i++) {
+          this.authIdList[bak.data[i].roleName] = bak.data[i].id;
+        }
       });
+    },
+    alterUserData() {
+      this.alterUserDialog = false;
+      if (this.editUserForm.role_name in this.authIdList) {
+        this.getData(`/users/${this.editUserForm.id}/role`, 'PUT', {rid: this.authIdList[this.editUserForm.role_name]}, (bak) => {
+          this.$message({message: '分配角色成功', type: 'success'});
+          this.getData(`/users?pagenum=${this.pagenum}&pagesize=${this.pagesize}`, 'GET', '', (bak) => {
+            this.userData = bak.data.users;
+          });
+        });
+      } else {
+        this.$message({message: '请选择角色', type: 'error'});
+      }
     },
   },
   mounted() {
@@ -268,10 +284,4 @@ export default {
 </script>
 
 <style>
-.page_brand {
-  background: #d3dce6;
-  width: 100%;
-  height: 40px;
-  padding-left: 30px;
-}
 </style>
