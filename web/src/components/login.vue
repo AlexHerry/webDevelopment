@@ -6,7 +6,7 @@
         <el-input v-model="loginForm.username"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="loginForm.password"></el-input>
+        <el-input v-model="loginForm.password" type="password"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="login_btn" @click="logins">登录</el-button>

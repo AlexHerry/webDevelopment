@@ -42,7 +42,7 @@
         @size-change="getsize"
         @current-change="getpage"
         :current-page="pagenum"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="[2, 3, 4, 40]"
         :page-size="pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -118,7 +118,7 @@ export default {
       userData: [],
       query: '',
       pagenum: 1,
-      pagesize: 10,
+      pagesize: 2,
       total: 0,
       addUserDialog: false,
       addUserForm: {
@@ -177,7 +177,7 @@ export default {
       });
     },
     searchKeyword() {
-      this.getData(`/users?query=${this.query}&pagenum=1&pagesize=10`, 'GET', '', (bak) => {
+      this.getData(`/users?query=${this.query}&pagenum=${this.pagenum}&${this.pagesize}`, 'GET', '', (bak) => {
         this.userData = bak.data.users;
       });
     },
@@ -190,8 +190,10 @@ export default {
         this.getData(`/users/${role.id}`, 'DELETE', '', (bak) => {
           if (bak.meta.status == 200) {
             this.$message({message: '删除成功', type: 'success'});
+            this.pagenum = 1;
             this.getData(`/users?pagenum=${this.pagenum}&pagesize=${this.pagesize}`, 'GET', '', (bak) => {
               this.userData = bak.data.users;
+              this.total = bak.data.total;
             });
           } else {
             this.$message({message: '删除失败', type: 'error'});
@@ -206,17 +208,18 @@ export default {
           this.getData('/users', 'POST', this.addUserForm, (bak) => {
             if (bak.meta.status == 201) {
               this.$message({message: '创建成功', type: 'success'});
-              this.addUserDialog = false;
               this.getData(`/users?pagenum=${this.pagenum}&pagesize=${this.pagesize}`, 'GET', '', (bak) => {
                 this.userData = bak.data.users;
+                this.total = bak.data.total;
               });
             } else {
               this.$message({message: '创建失败', type: 'error'});
             }
+            this.addUserDialog = false;
             this.addUserForm.username = '';
             this.addUserForm.password = '';
             this.addUserForm.email = '';
-            this.addUserForm.password = '';
+            this.addUserForm.mobile = '';
           });
         } else {
         }

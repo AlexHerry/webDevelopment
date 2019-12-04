@@ -9,6 +9,9 @@ import Goods from '@/components/goods';
 import AddGoods from '@/components/addGoods';
 import EditGoods from '@/components/editGoods';
 import Params from '@/components/params';
+import Categories from '@/components/categories';
+import Orders from '@/components/orders';
+import Reports from '@/components/reports';
 
 Vue.use(Router);
 
@@ -49,6 +52,22 @@ export default new Router({
         {
           path: '/params',
           component: Params,
+        },
+        {
+          path: '/categories',
+          component: Categories,
+        },
+        {
+          path: '/categories',
+          component: Categories,
+        },
+        {
+          path: '/orders',
+          component: Orders,
+        },
+        {
+          path: '/reports',
+          component: Reports,
         },
       ],
     },
